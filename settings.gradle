@@ -1,0 +1,3 @@
+rootProject.name = 'mar-automation'
+include 'api-tests'
+

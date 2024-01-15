@@ -1,0 +1,55 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.projectlombok:lombok:1.18.28'
+    implementation platform('org.junit:junit-bom:5.10.1')
+    implementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.junit.jupiter:junit-jupiter-engine'
+    implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.1'
+    implementation group: 'io.rest-assured', name: 'rest-assured', version: '5.0.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
+    //assertions
+    implementation group: 'org.assertj', name: 'assertj-core', version: '3.25.1'
+    // logger
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.14'
+}
+
+test {
+    testLogging {
+        events TestLogEvent.FAILED,
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.STARTED
+        exceptionFormat TestExceptionFormat.SHORT
+        showCauses true
+        showExceptions true
+        showStackTraces true
+        showStandardStreams true
+    }
+
+
+    useJUnitPlatform()
+
+    tasks.withType(Test).configureEach {
+        def outputDir = reports.junitXml.outputLocation
+        jvmArgumentProviders << ({
+            [
+                    "-Djunit.platform.reporting.open.xml.enabled=true",
+                    "-Djunit.platform.reporting.output.dir=${outputDir.get().asFile.absolutePath}"
+            ]
+        } as CommandLineArgumentProvider)
+    }
+}
