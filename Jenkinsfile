@@ -5,6 +5,7 @@ def reportName = "Test Report"
 
 pipeline{
 	agent any
+	properties([parameters([booleanParam(defaultValue: true, name: 'Smoke')])])
 	    stages {
             stage("Execute tests") {
                 steps {
