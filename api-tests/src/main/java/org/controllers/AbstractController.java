@@ -3,12 +3,14 @@ package org.controllers;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.configs.ApiConfiguration;
 
 public abstract class AbstractController {
   protected RequestSpecification requestSpecification = buildRequestSpecification() ;
-  public static final String API_VERSION = "v2";
-  public static final String API_KEY = "special-key";
-  public static final String PET_STORE_URI = "https://petstore.swagger.io/";
+  protected static final ApiConfiguration.ApiProps apiConfig = ApiConfiguration.endpoint();
+  protected static final String API_VERSION = apiConfig.apiVersion();
+  protected static final String API_KEY = apiConfig.apiKey();
+  protected static final String PET_STORE_URI = apiConfig.petStoreUri();
 
   public RequestSpecification buildRequestSpecification() {
     return new RequestSpecBuilder()
