@@ -1,3 +1,4 @@
 rootProject.name = 'mar-automation'
 include 'api-tests'
+include 'google-ui-tests'
 
