@@ -1,0 +1,30 @@
+pipeline{
+	agent any
+	parameters {booleanParam(defaultValue: true, name: 'Smoke')}
+	    stages {
+	        stage("Download browser") {
+               steps {
+                  script {
+                      sh 'docker pull selenoid/chrome:120.0'
+                  }
+              }
+            }
+            stage("Start Selenoid"){
+               steps {
+                  script {
+                      sh 'cd docker'
+                      sh 'docker-compose up'
+                  }
+               }
+            }
+            stage("Execute tests") {
+                steps {
+                    script {
+                        sh '''
+                            ./gradlew :google-ui-tests:clean :google-ui-tests:test
+                        '''
+                    }
+                }
+            }
+        }
+}
